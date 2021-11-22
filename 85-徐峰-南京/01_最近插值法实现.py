@@ -14,7 +14,7 @@ def nearestInterplot(img):
     height, width, channels = img.shape
 
     #new image with 800 * 800
-    #dtype 设置不对的话，对图像有影响
+    #dtype 对图像会有影响
     empty_img = np.zeros((800, 800, channels), dtype=np.uint8)
 
     sh = height / 800
