@@ -4,3 +4,4 @@ print(a)
 s=[]
 s.append(a)
 print(s)
+s.append(1)
