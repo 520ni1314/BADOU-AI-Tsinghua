@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""最近邻 """
+"""最近邻"""
 import cv2 as cv
 import numpy as np
 
