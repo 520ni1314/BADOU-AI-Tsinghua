@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 
 
 def nearest_interpolation(img, target_size: tuple):
@@ -30,12 +31,18 @@ def nearest_interpolation(img, target_size: tuple):
     img_new = img[y_target_index, x_target_index]
     img_new = img_new.reshape(h, w, channel)
 
-    cv2.imshow("resized", img_new)
-    cv2.waitKey(0)
+    return img_new
 
 
 if __name__ == '__main__':
     img_path = "./pics/lenna.png"
     img_bgr = cv2.imread(img_path)
-    img_gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
-    nearest_interpolation(img_gray, (680, 400))
+    time0 = time.time()
+    img_new_resize = nearest_interpolation(img_bgr, (700, 700))
+    time1 = time.time()
+
+    print("duration:", time1 - time0)
+
+    cv2.imshow("img_src", img_bgr)
+    cv2.imshow("img_resized", img_new_resize)
+    cv2.waitKey(0)
