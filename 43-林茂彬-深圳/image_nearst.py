@@ -16,7 +16,7 @@ def img_nearst(img):
     img_source = cv2.imread("lenna.png") # 导入图片
 #print(img_gray.shape) #得到图片的（行，列，通道）
     img_source_h,img_source_w,channels=img_source.shape
-    img_nearst = np.zeros((800, 800,channels), np.uint8)
+    img_nearst = np.zeros((800, 800,channels), img_source.dtype)
     img_h = 800 / img_source_h
     img_x = 800 / img_source_w
     for i in range(800):
