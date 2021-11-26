@@ -9,7 +9,7 @@ def bilinear_interpolation(img, out_dim):
     dst_h, dst_w = out_dim[1], out_dim[0]
     print("src_h, src_w = ", src_h, src_w)
     print("dst_h, dst_w = ", dst_h, dst_w)
-    if src_h == dst_h and src_w == dst_w:
+    if src_h <= dst_h or src_w <= dst_w:
         return img.copy()
     dst_img = np.zeros((dst_h, dst_w, 3), dtype=np.uint8)
     scale_x, scale_y = float(src_w) / dst_w, float(src_h) / dst_h
