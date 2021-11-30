@@ -19,17 +19,19 @@ def nearest_interpolation(img, target_size: tuple):
     ratio_h = h / height
     ratio_w = w / width
 
-    # 生成坐标矩阵
+    # 目标图像坐标矩阵
     y_index = np.arange(h, dtype=np.int32)
     x_index = np.arange(w, dtype=np.int32)
-    y_target_index = np.int32(y_index / np.array(ratio_h))
-    x_target_index = np.int32(x_index / np.array(ratio_w))
+
+    # 原图像对应坐标矩阵
+    y_src_index = np.int32(y_index / np.array(ratio_h))
+    x_src_index = np.int32(x_index / np.array(ratio_w))
 
     # 根据像素个数指定原图坐标
-    x_target_index = np.tile(x_target_index, h)
-    y_target_index = y_target_index.repeat(w)
+    x_src_index = np.tile(x_src_index, h)
+    y_src_index = y_src_index.repeat(w)
 
-    img_new = img[y_target_index, x_target_index]
+    img_new = img[y_src_index, x_src_index]
     img_new = img_new.reshape(h, w, channel)
 
     return img_new
