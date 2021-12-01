@@ -18,7 +18,9 @@ https://mp.weixin.qq.com/s?__biz=MzAxNjYyMzUzNQ==&mid=100006558&idx=4&sn=8c7862c
 git remote add upstream https://github.com/michael0420/BADOU-AI-Tsinghua.git
 git remote add upstream https://github.com/jinqi520/chapter7.git
 
-记录
+日常提交操作命令
+git pull
 git add .
-git commit -m "吴保宙提交作业目录_20211201"
+git commit -m "119-吴保宙-提交作业目录_2021-1201"
 git push
+
