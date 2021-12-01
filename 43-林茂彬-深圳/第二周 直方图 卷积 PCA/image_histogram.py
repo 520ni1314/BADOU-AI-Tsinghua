@@ -46,7 +46,32 @@ def img_histogram2(img):
     plt.hist(img_source.ravel(), 256)
     plt.show()
 
+# 彩色图像的直方图
+def img_histogram3(img):
+    image = cv2.imread("lenna.png")
+    cv2.imshow("Original",image)
+    #cv2.waitKey(0)
+
+    chans=cv2.split(image)
+    print(chans)
+    colors = ("b","g","r")
+    print(colors)
+    plt.figure()
+    plt.title("Flattened Color Histogram")
+    plt.xlabel("Bins")
+    plt.ylabel("# of Pixels")
+
+    for (chan,color) in zip(chans,colors):
+        hist = cv2.calcHist([chan],[0],None,[256],[0,256])
+        plt.plot(hist,color = color)
+        plt.xlim([0,256])
+    plt.show()
+
+
+
 if __name__ == '__main__':
     img_source = cv2.imread('lenna.png')
-    img_histogram = img_histogram(img_source)
-    img_histogram2 = img_histogram2(img_source)
+    #img_histogram = img_histogram(img_source)
+    #img_histogram2 = img_histogram2(img_source)
+    img_histogram3 = img_histogram3(img_source)
+
