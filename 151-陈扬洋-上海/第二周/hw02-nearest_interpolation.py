@@ -38,7 +38,7 @@ def nearest_interpolation(img, target_size: tuple):
 
 
 if __name__ == '__main__':
-    img_path = "./pics/lenna.png"
+    img_path = "../pics/lenna.png"
     img_bgr = cv2.imread(img_path)
     time0 = time.time()
     img_new_resize = nearest_interpolation(img_bgr, (700, 700))

@@ -52,10 +52,10 @@ def bilinear_interpolation(img, dst_size):
 
 
 if __name__ == '__main__':
-    img_path = "./pics/lenna.png"
+    img_path = "../pics/lenna.png"
     img_bgr = cv2.imread(img_path)
     img_gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
-    img_dst = bilinear_interpolation(img_bgr, (256, 728))
+    img_dst = bilinear_interpolation(img_bgr, (700, 700))
     cv2.imshow("img_src", img_bgr)
     cv2.imshow("img_resized", img_dst)
     cv2.waitKey(0)
