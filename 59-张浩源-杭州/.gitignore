@@ -1,3 +1,6 @@
 #Ignore .pyc file
 *.pyc
 !index.pyc
+
+#Ignore setting file
+*.vscode
