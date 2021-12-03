@@ -40,7 +40,7 @@ for i in range(y.shape[0]):
     if y[i] == 0:
         c = 'r'
         marker = 'x'
-    elif y[i] == 0:
+    elif y[i] == 1:
         c = 'b'
         marker = 'D'
     else:
