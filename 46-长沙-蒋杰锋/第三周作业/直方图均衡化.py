@@ -14,9 +14,9 @@ def HistogramEqualization(image):
     imageTotalPixel = height * width
     print("image total pixel is ", imageTotalPixel)
 
-    # plt.hist(image.flatten(), bins=255)
-    # plt.title = "before histogram equalization"
-    # plt.show()
+    plt.hist(image.flatten(), bins=255)
+    plt.title = "before histogram equalization"
+    plt.show()
 
     # sum value
     sumPix = 0
@@ -35,8 +35,8 @@ def HistogramEqualization(image):
         for j in range(width):
             image[i][j] = temp[image[i][j]]
 
-    # plt.hist(image.flatten(), bins=255)
-    # plt.show()
+    plt.hist(image.flatten(), bins=255)
+    plt.show()
     return image
 
 
