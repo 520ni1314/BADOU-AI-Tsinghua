@@ -42,21 +42,26 @@ class ImageProcess(ImageBasic):
         return img
 
 
-improcess = ImageProcess(img_loc)
-img_raw = improcess.img
-img_enlarge = improcess.NNInterp(800, 800)
+def Main():
+    improcess = ImageProcess(img_loc)
+    img_raw = improcess.img
+    img_enlarge = improcess.NNInterp(800, 800)
 
-plt.subplot(1, 2, 1)
-plt.axis("off")
-plt.imshow(cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB))
-plt.title("origin lenna\n512x512")
+    plt.subplot(1, 2, 1)
+    plt.axis("off")
+    plt.imshow(cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB))
+    plt.title("origin lenna\n512x512")
 
-plt.subplot(1, 2, 2)
-plt.axis("off")
-plt.imshow(cv2.cvtColor(img_enlarge, cv2.COLOR_BGR2RGB))
-plt.title("enlarge lenna\n800x800")
+    plt.subplot(1, 2, 2)
+    plt.axis("off")
+    plt.imshow(cv2.cvtColor(img_enlarge, cv2.COLOR_BGR2RGB))
+    plt.title("enlarge lenna\n800x800")
 
-plt.suptitle("Nearest Neighbor Interpolation")
-plt.tight_layout()
-plt.show()
-plt.close()
+    plt.suptitle("Nearest Neighbor Interpolation")
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+
+if __name__ == "__main__":
+    Main()
