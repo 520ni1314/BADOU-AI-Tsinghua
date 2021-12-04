@@ -79,7 +79,7 @@ def main(data,label):
     top_det = det_v[:,top_index]
     #对特征向量和输入矩阵做卷积
     result = np.dot(data,top_det)
-
+    #展示效果
     show(result,label)
 
 def show(reduced_x,y):
