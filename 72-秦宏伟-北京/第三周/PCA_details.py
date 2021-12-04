@@ -82,7 +82,6 @@ def main(data,label):
 
     show(result,label)
 
-
 def show(reduced_x,y):
     red_x, red_y = [], []
     blue_x, blue_y = [], []
