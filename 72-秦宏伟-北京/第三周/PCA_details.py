@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 PCA降维详细版1，不进行数据中心化，直接求协方差矩阵
 """
 
-
 """
 求向量的协方差
 输入 二维数组，向量为N*2
