@@ -55,6 +55,7 @@ class CPCA(object):
         ind = np.argsort(-1*a)
         #构建K阶降维的降维转换矩阵U
         UT = [b[:,ind[i]] for i in range(self.K)]
+        print('dddd %s ' %UT )
         U = np.transpose(UT)
         print('%d阶降维转换矩阵U:\n'%self.K, U)
         return U

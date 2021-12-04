@@ -4,5 +4,13 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import cv2
 
-src_x0 = int(np.floor(1.3))
-print(src_x0)
+from numpy import *
+import numpy as np
+
+X = np.array([[1, 1],
+              [2, 2]]
+
+             )
+K = np.dot(X,X)
+
+print(K)
