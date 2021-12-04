@@ -1,6 +1,20 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
+"""调包实现直方图均衡化"""
+deal_img = cv2.imread("lenna.png")
+gray_img = cv2.cvtColor(deal_img, cv2.COLOR_BGR2GRAY)
+dst_img=cv2.equalizeHist(gray_img)
+hist = cv2.calcHist([gray_img], [0], None, [256], [0, 255])
+# plt.figure()
+# plt.plot(hist, "r")  #直方图曲线化
+# plt.show()
+
+a=plt.hist(gray_img.ravel(),256,color="r")
+b=plt.hist(dst_img.ravel(),256,color="g")
+plt.show()
+
 '''
 """直方图均衡化，灰度图详细计算"""
 src_img=cv2.imread("../lenna.png")
@@ -16,16 +30,25 @@ for gray_num in range(256):
         for j in range(w):
            if int(gray_img[i,j])==gray_num:
                sum=sum+1
+    if q<0:
+        q=0
     q=int(sum/total_pix*256-1)  #根据公式q=sum/(h*w)*256-1计算均衡化值
     """对每一个同像素值的像素重新赋值"""
     for x in range(h):
         for y in range(w):
             if int(gray_img[x, y]) == gray_num:
                 new_img[x,y]=q
-print(gray_img)
-print(new_img)
-cv2.imshow("new_img",new_img)
-cv2.waitKey(10000)
+# print(gray_img)
+# print(new_img)
+# cv2.imshow("new_img",new_img)
+# cv2.waitKey(10000)
+
+plt.hist(gray_img.ravel(),256,color="r")
+plt.hist(new_img.ravel(),256,color="g")
+plt.show()
+'''
+
+
 '''
 """调用库函数，对三通道图像进行直方图均衡化"""
 src_img=cv2.imread("lenna.png")
@@ -48,3 +71,5 @@ plt.subplot(222)
 # print("均衡化显示")
 plt.imshow(dst_img_show)
 plt.show()
+'''
+
