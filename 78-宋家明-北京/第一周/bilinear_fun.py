@@ -6,7 +6,7 @@ def bilinear_fun(img, dst_hw):
     dst_h, dst_w = dst_hw
     src_h, src_w, _ = img.shape
     
-    dst_img = np.zeros((dst_h,dst_w,3),np.uint8)
+    dst_img = np.zeros((dst_h,dst_w,3),np.uint8)+255
     size_thh, size_thw = src_h/dst_h, src_w/dst_w
     for c in range(3):
         for ix in range(dst_w):
@@ -29,14 +29,10 @@ def bilinear_fun(img, dst_hw):
                 else :
                     pass   
                     up = (img[int(np.floor(src_y)),int(np.ceil(src_x)),c] - img[int(np.floor(src_y)),int(np.floor(src_x)),c])*x_re + img[int(np.floor(src_y)),int(np.floor(src_x)),c]
-#                    down = (img[int(np.ceil(src_y)),int(np.ceil(src_x)),c] - img[int(np.ceil(src_y)),int(np.floor(src_x)),c])*x_re + img[int(np.ceil(src_y)),int(np.floor(src_x)),c]
-#                    print(down.shape,'...',up.shape)
-#                    print((down - up)*y_re + down)
-                    print(dst_img[jy,ix])
-#                    dst_img[jy,ix,c] = (down - up)*y_re + down
+                    down = (img[int(np.ceil(src_y)),int(np.ceil(src_x)),c] - img[int(np.ceil(src_y)),int(np.floor(src_x)),c])*x_re + img[int(np.ceil(src_y)),int(np.floor(src_x)),c]
+                    dst_img[jy,ix,c] = (down - up)*y_re + down
     dst_img = dst_img.astype(np.uint8)
-
-
+    
     return dst_img
 
 
