@@ -58,30 +58,34 @@ class ImageProcess(ImageBasic):
         return img_b
 
 
-improcess = ImageProcess(img_loc)
-img_raw = improcess.img
-img_gray_0 = improcess.GrayingFormular()
-img_gray_1 = improcess.GrayingModule()
-img_bin_0 = improcess.BinariFormular()
-img_bin_1 = improcess.BinariModule()
+def Main():
+    improcess = ImageProcess(img_loc)
+    img_raw = improcess.img
+    img_gray_0 = improcess.GrayingFormular()
+    img_gray_1 = improcess.GrayingModule()
+    img_bin_0 = improcess.BinariFormular()
+    img_bin_1 = improcess.BinariModule()
+
+    plt.subplot(1, 3, 1)
+    plt.axis("off")
+    plt.imshow(cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB))
+    plt.title("origin lenna")
+
+    plt.subplot(1, 3, 2)
+    plt.axis("off")
+    plt.imshow(img_gray_0, cmap="gray")
+    plt.title("graying lenna")
+
+    plt.subplot(1, 3, 3)
+    plt.axis("off")
+    plt.imshow(img_bin_0, cmap="gray")
+    plt.title("binarization lenna")
+
+    plt.suptitle("Image Processing Basics")
+    plt.tight_layout()
+    plt.show()
+    plt.close()
 
 
-plt.subplot(1, 3, 1)
-plt.axis("off")
-plt.imshow(cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB))
-plt.title("origin lenna")
-
-plt.subplot(1, 3, 2)
-plt.axis("off")
-plt.imshow(img_gray_0, cmap="gray")
-plt.title("graying lenna")
-
-plt.subplot(1, 3, 3)
-plt.axis("off")
-plt.imshow(img_bin_0, cmap="gray")
-plt.title("binarization lenna")
-
-plt.suptitle("Image Processing Basics")
-plt.tight_layout()
-plt.show()
-plt.close()
+if __name__ == "__main__":
+    Main()
