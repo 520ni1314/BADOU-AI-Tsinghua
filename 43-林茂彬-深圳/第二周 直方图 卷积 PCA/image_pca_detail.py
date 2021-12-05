@@ -68,6 +68,7 @@ class PCA:
         print('%d阶降维转换矩阵U:\n'%self.K, U)
         return U
 
+
     def _Z(self):
         '''按照Z=XU求降维矩阵Z, shape=(m,k), n是样本总数，k是降维矩阵中特征维度总数'''
         Z = np.dot(self.X, self.U)
