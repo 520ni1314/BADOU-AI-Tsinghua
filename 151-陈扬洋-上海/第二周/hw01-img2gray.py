@@ -22,6 +22,6 @@ def img2gray(img, mode=0):
 
 
 if __name__ == '__main__':
-    img_path = "./pics/lenna.png"
+    img_path = "../pics/lenna.png"
     img_bgr = cv2.imread(img_path)
     img2gray(img_bgr, 0)
