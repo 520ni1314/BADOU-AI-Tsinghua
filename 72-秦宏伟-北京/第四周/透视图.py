@@ -39,7 +39,7 @@ print(img.shape)
 # 生成透视变换矩阵；进行透视变换
 # m = cv2.getPerspectiveTransform(src, dst)
 
-#透视矩阵
+#计算透视矩阵
 m = matrix(src,dst)
 print("warpMatrix:")
 print(m)
