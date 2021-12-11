@@ -5,6 +5,7 @@ img = cv2.imread('photo1.jpg')
 
 result3 = img.copy()
 
+
 '''
 注意这里src和dst的输入并不是图像，而是图像对应的顶点坐标。
 '''
