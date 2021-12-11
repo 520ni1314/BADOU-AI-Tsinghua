@@ -1,47 +1,21 @@
-#!/usr/bin/env python
-# encoding=gbk
-
-'''
-Canny±ßÔµ¼ì²â£ºÓÅ»¯µÄ³ÌĞò
-'''
 import cv2
 import numpy as np
 
+img = cv2.imread('photo1.jpg')
 
-def CannyThreshold(lowThreshold):
-    detected_edges = cv2.GaussianBlur(gray, (3, 3), 0)  # ¸ßË¹ÂË²¨
-    detected_edges = cv2.Canny(detected_edges,
-                               lowThreshold,
-                               lowThreshold * ratio,
-                               apertureSize=kernel_size)  # ±ßÔµ¼ì²â
+result3 = img.copy()
 
-    # just add some colours to edges from original image.
-    dst = cv2.bitwise_and(img, img, mask=detected_edges)  # ÓÃÔ­Ê¼ÑÕÉ«Ìí¼Óµ½¼ì²âµÄ±ßÔµÉÏ
-    cv2.imshow('canny demo', dst)
-
-
-lowThreshold = 0
-max_lowThreshold = 100
-ratio = 3
-kernel_size = 3
-
-img = cv2.imread('lenna.png')
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # ×ª»»²ÊÉ«Í¼ÏñÎª»Ò¶ÈÍ¼
-
-cv2.namedWindow('canny demo')
-
-# ÉèÖÃµ÷½Ú¸Ü,
 '''
-ÏÂÃæÊÇµÚ¶ş¸öº¯Êı£¬cv2.createTrackbar()
-¹²ÓĞ5¸ö²ÎÊı£¬ÆäÊµÕâÎå¸ö²ÎÊı¿´±äÁ¿Ãû¾Í´ó¸ÅÄÜÖªµÀÊÇÊ²Ã´ÒâË¼ÁË
-µÚÒ»¸ö²ÎÊı£¬ÊÇÕâ¸ötrackbar¶ÔÏóµÄÃû×Ö
-µÚ¶ş¸ö²ÎÊı£¬ÊÇÕâ¸ötrackbar¶ÔÏóËùÔÚÃæ°åµÄÃû×Ö
-µÚÈı¸ö²ÎÊı£¬ÊÇÕâ¸ötrackbarµÄÄ¬ÈÏÖµ,Ò²ÊÇµ÷½ÚµÄ¶ÔÏó
-µÚËÄ¸ö²ÎÊı£¬ÊÇÕâ¸ötrackbarÉÏµ÷½ÚµÄ·¶Î§(0~count)
-µÚÎå¸ö²ÎÊı£¬ÊÇµ÷½ÚtrackbarÊ±µ÷ÓÃµÄ»Øµ÷º¯ÊıÃû
+æ³¨æ„è¿™é‡Œsrcå’Œdstçš„è¾“å…¥å¹¶ä¸æ˜¯å›¾åƒï¼Œè€Œæ˜¯å›¾åƒå¯¹åº”çš„é¡¶ç‚¹åæ ‡ã€‚
 '''
-cv2.createTrackbar('Min threshold', 'canny demo', lowThreshold, max_lowThreshold, CannyThreshold)
-
-CannyThreshold(0)  # initialization
-if cv2.waitKey(0) == 27:  # wait for ESC key to exit cv2
-    cv2.destroyAllWindows()
+src = np.float32([[207, 151], [517, 285], [17, 601], [343, 731]])
+dst = np.float32([[0, 0], [337, 0], [0, 488], [337, 488]])
+print(img.shape)
+# ç”Ÿæˆé€è§†å˜æ¢çŸ©é˜µï¼›è¿›è¡Œé€è§†å˜æ¢
+m = cv2.getPerspectiveTransform(src, dst)
+print("warpMatrix:")
+print(m)
+result = cv2.warpPerspective(result3, m, (337, 488))
+cv2.imshow("src", img)
+cv2.imshow("result", result)
+cv2.waitKey(0)
