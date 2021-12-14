@@ -29,9 +29,11 @@ class NPCA:
     def __init__(self, X, K) -> None:
         self.X = X
         self.K = K
-
+        """样本特征中心化"""
         self.X_center = self.X - self.X.mean(axis=0)
+        """求协方差矩阵"""
         self.cov_mat = np.dot(self.X_center.T, self.X_center) / (self.X.shape[0] - 1)
+        """求K个主成分特征向量矩阵"""
         eigvals, elgvectors = np.linalg.eig(self.cov_mat)
         print("特征值：", eigvals)
 
@@ -40,33 +42,8 @@ class NPCA:
 
         # 取前K个特征向量
         self.eigv_K = elgvectors[:, ind[:self.K]]
-        self.Z = np.dot(self.X_center, self.eigv_K)
-
-        
-    def _centralize(self):
-        """样本特征中心化"""
-        return None
-
-    def _cov(self):
-        """求协方差矩阵"""
-        return None
-
-    def _U(self):
-        """求K个主成分特征向量矩阵"""
-        # 求特征值和特征矩阵
-        eigvals, elgvectors = np.linalg.eig(self.cov_mat)
-        print("特征值：", eigvals)
-
-        # 按特征值高低排序
-        ind = np.argsort(-eigvals)
-
-        # 取前K个特征向量
-        U = elgvectors[:, ind[:self.K]]
-        return U
-
-    def _Z(self):
         """求降维矩阵"""
-        return np.dot(self.X_center, self.eigv_K)
+        self.Z = np.dot(self.X_center, self.eigv_K)
 
 
 if __name__ == "__main__":
