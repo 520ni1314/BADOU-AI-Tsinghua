@@ -21,7 +21,7 @@ mean=np.array([np.mean(attr) for attr in X.T])  # X.T 获得X 的转置矩阵，
 print('样本集的特征均值:\n',mean)
 centrX= X-mean   # 每行对应减mean
 
-#协方差矩阵
+#  协方差矩阵
 ns=np.shape(X)[0]  # 样本总数
 C = np.dot(centrX.T, centrX)/ns  # 中心化之后的协方差矩阵公式
 print('样本矩阵X的协方差矩阵C:\n', C)
