@@ -24,8 +24,8 @@ def bilinear_interpolation(img,out_dim):
                 dstimg[dsty, dstx, i] = int((srcy1 - srcy) * temp0 + (srcy - srcy0) * temp1)
     return dstimg
 
-img=cv2.imread("lenna.png")
-out_dim=[900,900]
+img=cv2.imread("bat.jpg")
+out_dim=[1000,1000]
 bilimg=bilinear_interpolation(img,out_dim)
 cv2.imshow("bilinear interpolation",bilimg)
 cv2.waitKey(0)
