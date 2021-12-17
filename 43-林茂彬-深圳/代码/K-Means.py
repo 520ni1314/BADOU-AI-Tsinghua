@@ -1,5 +1,5 @@
 # coding: utf-8
-
+# https://blog.csdn.net/lanshi00/article/details/104109963
 '''
 在OpenCV中，Kmeans()函数原型如下所示：
 retval, bestLabels, centers = kmeans(data, K, bestLabels, criteria, attempts, flags[, centers])
@@ -21,8 +21,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #读取原始图像灰度颜色
-img = cv2.imread('lenna.png', 0) 
-print (img.shape)
+img = cv2.imread('lenna.png', 0)
+
+
+'''
+imread函数有两个参数，第一个参数是图片路径，第二个参数表示读取图片的形式，有三种：
+cv2.IMREAD_COLOR：加载彩色图片，这个是默认参数，可以直接写1。
+cv2.IMREAD_GRAYSCALE：以灰度模式加载图片，可以直接写0。
+cv2.IMREAD_UNCHANGED：包括alpha，可以直接写-1
+'''
+
+
 
 #获取图像高度、宽度
 rows, cols = img.shape[:]
@@ -42,16 +51,17 @@ flags = cv2.KMEANS_RANDOM_CENTERS
 compactness, labels, centers = cv2.kmeans(data, 4, None, criteria, 10, flags)
 
 #生成最终图像
-dst = labels.reshape((img.shape[0], img.shape[1]))
+
+dst = labels.reshape((img.shape))
 
 #用来正常显示中文标签
 plt.rcParams['font.sans-serif']=['SimHei']
 
 #显示图像
-titles = [u'原始图像', u'聚类图像']  
+titles = ['原始图像', '聚类图像']
 images = [img, dst]  
 for i in range(2):  
-   plt.subplot(1,2,i+1), plt.imshow(images[i], 'gray'), 
+   plt.subplot(1,2,i+1), plt.imshow(images[i], 'gray'), #使用plt.subplot来创建小图. plt.subplot(221)表示将整个图像窗口分为2行2列, 当前位置为1.第一个参数代表子图的行数；第二个参数代表该行图像的列数； 第三个参数代表每行的第几个图像。
    plt.title(titles[i])  
-   plt.xticks([]),plt.yticks([])  
+   plt.xticks([]),plt.yticks([])
 plt.show()
