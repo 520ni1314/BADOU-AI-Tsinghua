@@ -38,5 +38,3 @@ labels=labels.reshape([x_shape,y_shape])
 plt.imshow(labels,cmap='gray')
 plt.axis('off')
 plt.show()
-
-
