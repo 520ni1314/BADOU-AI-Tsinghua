@@ -54,8 +54,7 @@ def gray_cvt2(img):
 
 def gray_cvt3(img):
     """3. 移位算法 """
-    raise RuntimeError("不懂移位法怎么做，方法未完成")
-    # return img[:, :, 0] * 28 + img[:, :, 1] * 151 + img[:, :, 2] * 76
+    return (img[:, :, 0] * 28 + img[:, :, 1] * 151 + img[:, :, 2] * 76) >> 8
 
 def gray_cvt4(img):
     """4. 平均法"""
@@ -68,7 +67,9 @@ def gray_cvt5(img):
 
 # BGR mode
 img = cv2.imread(fig_path())
-img_gray = gray_image(img, mode=1).astype(np.uint8)
+# numpy计算要先转化为int，不然在其中一些方法计算的时候结果会不正确
+img_gray = gray_image(img.astype(int), mode=5)
+img_gray = img_gray.astype(np.uint8)
 img_gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 fig, ax = plt.subplots(1, 2)
@@ -80,7 +81,7 @@ plt.show()
 #%%  二值化
 
 
-img_binary = np.where(img_gray >= 100, 1, 0) 
+img_binary = np.where(img_gray >= 130, 1, 0) 
 print("-----imge_binary------")
 print(img_binary)
 print(img_binary.shape)
