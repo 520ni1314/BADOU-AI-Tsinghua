@@ -1,3 +1,8 @@
+"""
+@GiffordY
+使用透视变换算法，实现图像矫正
+"""
+
 import cv2 as cv
 import numpy as np
 
