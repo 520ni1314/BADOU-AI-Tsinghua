@@ -128,6 +128,9 @@ def test():
 
     linear_fit, resides, rank, s = sl.lstsq(all_data[:, input_columns], all_data[:, output_columns])
 
+
+
+
     # run RANSAC 算法
     ransac_fit, ransac_data = ransac(all_data, model, 50, 1000, 7e3, 300, return_all=True)
     '''
