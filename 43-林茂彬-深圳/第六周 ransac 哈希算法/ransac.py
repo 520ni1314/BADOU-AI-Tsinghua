@@ -153,15 +153,18 @@ def test():
             pylab.plot(A_noisy[:, 0], B_noisy[:, 0], 'k.', label='data')  # 散点图
             pylab.plot(A_noisy[ransac_data['inliers'], 0], B_noisy[ransac_data['inliers'], 0], 'bx',
                        label="RANSAC data")
+        else:
+            pylab.plot(A_noisy[non_outlier_idxs, 0], B_noisy[non_outlier_idxs, 0], 'k.', label='noisy data')
+            pylab.plot(A_noisy[outlier_idxs, 0], B_noisy[outlier_idxs, 0], 'r.', label='outlier data')
 
         pylab.plot(A_col0_sorted[:, 0],
-                   np.dot(A_col0_sorted, ransac_fit)[:, 0],  # 经过迭代的模型
+                   np.dot(A_col0_sorted, ransac_fit)[:, 0],
                    label='RANSAC fit')
         pylab.plot(A_col0_sorted[:, 0],
-                   np.dot(A_col0_sorted, perfect_fit)[:, 0],  # 迭代开始之前的随机斜线
+                   np.dot(A_col0_sorted, perfect_fit)[:, 0],
                    label='exact system')
         pylab.plot(A_col0_sorted[:, 0],
-                   np.dot(A_col0_sorted, linear_fit)[:, 0],  # 最小二乘法生成，用于第一次迭代的模型
+                   np.dot(A_col0_sorted, linear_fit)[:, 0],
                    label='linear fit')
         pylab.legend()
         pylab.show()
