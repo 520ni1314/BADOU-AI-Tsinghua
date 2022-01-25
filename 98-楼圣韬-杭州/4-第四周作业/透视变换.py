@@ -114,12 +114,12 @@ fp=findpoint(gray)
 for i in fp:
     print(i)
 
-src = np.float32([[207, 151], [517, 285], [17, 601], [343, 731]])
-print(src)
+src1 = np.float32([[207, 151], [517, 285], [17, 601], [343, 731]])
+print(src1)
 
-dst = np.float32([[0, 0], [337, 0], [0, 488], [337, 488]])
-print(dst)
-wt=WarpPerspectiveMatrix1(src, dst)
+dst1 = np.float32([[0, 0], [337, 0], [0, 488], [337, 488]])
+print(dst1)
+wt=WarpPerspectiveMatrix1(src1, dst1)
 #  也可以直接调用cv2函数接口直接求变换矩阵: m=cv2.getPerspectiveTransform(src, dst)
 print("warpMatrix:")
 print(wt)
