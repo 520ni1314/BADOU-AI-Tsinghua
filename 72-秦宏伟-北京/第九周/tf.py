@@ -70,4 +70,3 @@ with tf.Session() as sess:
         else:
             scores.append(0)
     print(scores)
-    # prediction_value = sess.run(prediction, feed_dict={x: x_data})
