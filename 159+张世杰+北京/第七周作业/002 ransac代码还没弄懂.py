@@ -1,3 +1,4 @@
+# encoding: utf-8
 import numpy as np
 import scipy as sp
 import scipy.linalg as sl
@@ -17,22 +18,22 @@ def ransac(data, model, n, k, t, d, debug=False, return_all=False):
 
     iterations = 0
     bestfit = nil #后面更新
-    besterr = something really large #后期更新 besterr = thiserr
+    besterr = something really large #后期更新besterr = thiserr
     while iterations < k
     {
         maybeinliers = 从样本中随机选取n个,不一定全是局内点,甚至全部为局外点
-        maybemodel = n个 maybeinliers 拟合出来的可能符合要求的模型
+        maybemodel = n个maybeinliers 拟合出来的可能符合要求的模型
         alsoinliers = emptyset #满足误差要求的样本点,开始置空
-        for (每一个不是 maybeinliers 的样本点)
+        for (每一个不是maybeinliers的样本点)
         {
-            if 满足 maybemodel 即 error < t
-                将点加入 alsoinliers
+            if 满足maybemodel即error < t
+                将点加入alsoinliers
         }
-        if (alsoinliers 样本点数目 > d)
+        if (alsoinliers样本点数目 > d)
         {
             %有了较好的模型,测试模型符合度
-            bettermodel = 利用所有的 maybeinliers 和 alsoinliers 重新生成更好的模型
-            thiserr = 所有的 maybeinliers 和 alsoinliers 样本点的误差度量
+            bettermodel = 利用所有的maybeinliers 和 alsoinliers 重新生成更好的模型
+            thiserr = 所有的maybeinliers 和 alsoinliers 样本点的误差度量
             if thiserr < besterr
             {
                 bestfit = bettermodel
@@ -45,7 +46,7 @@ def ransac(data, model, n, k, t, d, debug=False, return_all=False):
     """
     iterations = 0
     bestfit = None
-    besterr = np.inf  # 设置默认值
+    besterr = np.inf  # 设置默认值:无穷大
     best_inlier_idxs = None
     while iterations < k:
         maybe_idxs, test_idxs = random_partition(n, data.shape[0])
@@ -61,7 +62,7 @@ def ransac(data, model, n, k, t, d, debug=False, return_all=False):
         if debug:
             print('test_err.min()', test_err.min())
             print('test_err.max()', test_err.max())
-            print('numpy.mean(test_err)', numpy.mean(test_err))
+            print('numpy.mean(test_err)', np.mean(test_err))
             print('iteration %d:len(alsoinliers) = %d' % (iterations, len(also_inliers)))
         # if len(also_inliers > d):
         print('d = ', d)
@@ -100,7 +101,7 @@ class LinearLeastSquareModel:
         self.debug = debug
 
     def fit(self, data):
-        # np.vstack 按垂直方向（行顺序）堆叠数组构成一个新的数组
+        # np.vstack按垂直方向（行顺序）堆叠数组构成一个新的数组
         A = np.vstack([data[:, i] for i in self.input_columns]).T  # 第一列Xi-->行Xi
         B = np.vstack([data[:, i] for i in self.output_columns]).T  # 第二列Yi-->行Yi
         x, resids, rank, s = sl.lstsq(A, B)  # residues:残差和
@@ -119,17 +120,13 @@ def test():
     n_samples = 500  # 样本个数
     n_inputs = 1  # 输入变量个数
     n_outputs = 1  # 输出变量个数
-    A_exact = 20 * np.random.random((n_samples, n_inputs))  # 随机生成0-20之间的500个数据:行向量
+    A_exact = 20 * np.random.random((n_samples, n_inputs))  # 随机生成0-20之间的500个数据:行向量(感觉像是列向量)
     perfect_fit = 60 * np.random.normal(size=(n_inputs, n_outputs))  # 随机线性度，即随机生成一个斜率
     B_exact = sp.dot(A_exact, perfect_fit)  # y = x * k
 
     # 加入高斯噪声,最小二乘能很好的处理
-    A_noisy = A_exact + np.random.normal(size=A_exact.shape)  # 500 * 1行向量,代表Xi  np.random.normal()的意思是一个正态分布
+    A_noisy = A_exact + np.random.normal(size=A_exact.shape)  # 500 * 1行向量,代表Xi
     B_noisy = B_exact + np.random.normal(size=B_exact.shape)  # 500 * 1行向量,代表Yi
-
-
-
-
 
     if 1:
         # 添加"局外点"
@@ -145,8 +142,7 @@ def test():
     output_columns = [n_inputs + i for i in range(n_outputs)]  # 数组最后一列y:1
     debug = False
     model = LinearLeastSquareModel(input_columns, output_columns, debug=debug)  # 类的实例化:用最小二乘生成已知模型
-    a =  all_data[:, input_columns]
-    b =  all_data[:, output_columns]
+
     linear_fit, resids, rank, s = sp.linalg.lstsq(all_data[:, input_columns], all_data[:, output_columns])
 
     # run RANSAC 算法
