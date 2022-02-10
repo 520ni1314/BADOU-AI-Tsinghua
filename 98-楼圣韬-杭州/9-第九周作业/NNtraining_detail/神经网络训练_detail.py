@@ -50,8 +50,6 @@ def NNinit(epoches):
     training_data_list = training_data_file.readlines()
     test_data_file = open("dataset/mnist_test.csv", 'r')
     test_data_list = test_data_file.readlines()
-    print(training_data_list)
-    print(test_data_list)
     training_data_file.close()  # 关闭文件占用内存
     test_data_file.close()
     for i in range(epoches):
