@@ -6,6 +6,7 @@ import numpy as np
 import os
 import cv2 as cv
 
+
 class NeuralNetwork:
     def __init__(self, input_nodes, hidden_nodes, output_nodes, learning_rate):
         # 初始化网络，设置输入层，中间层，和输出层节点数
@@ -87,8 +88,12 @@ class NeuralNetwork:
 
 def array_to_image(test_X, index):
     # 将测试集数据转为图片保存，便于查看
-    gray_values = np.array(test_X, dtype=np.uint8).reshape((28, 28))
-    save_path = os.path.join('../00-data/datasets/my_mnist/test_images', str(index) + '.png')
+    tmp_X = (test_X - 0.01) * 255.0 / 0.99
+    gray_values = np.array(tmp_X, dtype=np.uint8).reshape((28, 28))
+    save_folder = '../00-data/datasets/my_mnist/test_images'
+    if not os.path.exists(save_folder):
+        os.makedirs(save_folder)
+    save_path = os.path.join(save_folder, str(index) + '.png')
     cv.imwrite(save_path, gray_values)
 
 
@@ -101,7 +106,7 @@ if __name__ == '__main__':
     hidden_nodes = 512
     output_nodes = 10
     learning_rate = 0.1
-    epochs = 50
+    epochs = 100
     MLP = NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 
     # 读入原始训练集数据
