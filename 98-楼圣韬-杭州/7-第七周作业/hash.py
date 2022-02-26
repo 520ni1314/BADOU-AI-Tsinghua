@@ -58,14 +58,14 @@ def test():
     img2=cv2.imread('lenna_noise.png')
     hash1=aHash(img1)
     hash2=aHash(img2)
-    print(hash1,'\n',hash2)
+    print('',hash1,'\n',hash2)
     n=cmpHash(hash1,hash2)
     print('均值哈希算法相似度:',n)
 
     hash1 = dHash(img1)
     hash2 = dHash(img2)
-    print(hash1, '\n', hash2)
-    n = cmpHash(hash1, hash2)
+    print('',hash1, '\n',hash2)
+    n = cmpHash(hash1,hash2)
     print('差值哈希算法相似度:', n)
 
 test()
