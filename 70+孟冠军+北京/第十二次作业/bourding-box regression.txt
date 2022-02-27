@@ -1,0 +1,33 @@
+https://blog.csdn.net/zijin0802034/article/details/77685438
+1、为什么要边框回归？
+答：绿色的框表示Ground Truth, 红色的框为Selective Search提取的Region Proposal。那么即便红色的框被分类器识别为飞机，但是由于红色的框定位不准(IoU<0.5)， 那么这张图相当于没有正确的检测出飞机。 如果我们能对红色的框进行微调， 使得经过微调后的窗口跟Ground Truth 更接近， 这样岂不是定位会更准确。 确实，Bounding-box regression 就是用来微调这个窗口的。
+
+2、什么是边框回归？
+答：对于窗口一般使用四维向量(x,y,w,h)来表示， 分别表示窗口的中心点坐标和宽高。 对于图 2, 红色的框 P 代表原始的Proposal, 绿色的框 G 代表目标的 Ground Truth， 我们的目标是寻找一种关系使得输入原始的窗口 P 经过映射得到一个跟真实窗口 G 更接近的回归窗口G^
+边框回归的目的既是：给定(Px,Py,Pw,Ph)寻找一种映射ff， 使得f(Px,Py,Pw,Ph)=(Gx^,Gy^,Gw^,Gh^)并且(Gx^,Gy^,Gw^,Gh^)≈(Gx,Gy,Gw,Gh)
+
+3、边框回归怎么做的？
+答：那么经过何种变换才能从图 2 中的窗口 P 变为窗口G^G^呢？ 比较简单的思路就是: 平移+尺度放缩
+先做平移(Δx,Δy)， Δx=Pwdx(P),Δy=Phdy(P) 这是R-CNN论文的：
+G^x=Pwdx(P)+Px,(1)
+G^y=Phdy(P)+Py,(2)
+然后再做尺度缩放(Sw,Sh)(Sw,Sh), Sw=exp(dw(P)),Sh=exp(dh(P)), 对应论文中：
+G^w=Pwexp(dw(P)),(3)
+G^h=Phexp(dh(P)),(4)
+观察(1)-(4)我们发现， 边框回归学习就是dx(P),dy(P),dw(P),dh(P)这四个变换。下一步就是设计算法那得到这四个映射。
+线性回归就是给定输入的特征向量 X, 学习一组参数 W, 使得经过线性回归后的值跟真实值 Y(Ground Truth)非常接近. 即Y≈WXY≈WX 。 那么 Bounding-box 中我们的输入以及输出分别是什么呢？
+
+Input:
+RegionProposal→P=(Px,Py,Pw,Ph)RegionProposal→P=(Px,Py,Pw,Ph)，这个是什么？ 输入就是这四个数值吗？其实真正的输入是这个窗口对应的 CNN 特征，也就是 R-CNN 中的 Pool5 feature（特征向量）。 (注：训练阶段输入还包括 Ground Truth， 也就是下边提到的t∗=(tx,ty,tw,th)t∗=(tx,ty,tw,th))
+
+Output:
+需要进行的平移变换和尺度缩放 dx(P),dy(P),dw(P)， 或者说是Δx,Δy,Sw,Sh。 我们的最终输出不应该是 Ground Truth 吗？ 是的， 但是有了这四个变换我们就可以直接得到 Ground Truth， 这里还有个问题， 根据(1)~(4)我们可以知道， P 经过 dx(P),dy(P),dw(P),dh(P) 得到的并不是真实值 G， 而是预测值G^。 的确， 这四个值应该是经过 Ground Truth 和 Proposal 计算得到的真正需要的平移量(tx,ty) 和尺度缩放(tw,th)。
+这也就是 R-CNN 中的(6)~(9)：
+tx=(Gx−Px)/Pw,(6)
+ty=(Gy−Py)/Ph,(7)
+tw=log(Gw/Pw),(8)
+th=log⁡(Gh/Ph),(9)
+那么目标函数可以表示为 d∗(P)=wT∗Φ5(P)d∗(P)=w∗TΦ5(P)， Φ5(P)Φ5(P)是输入 Proposal 的特征向量，w∗w∗是要学习的参数（*表示 x,y,w,h， 也就是每一个变换对应一个目标函数） , d∗(P)d∗(P) 是得到的预测值。 我们要让预测值跟真实值t∗=(tx,ty,tw,th)t∗=(tx,ty,tw,th)差距最小， 得到损失函数为：
+Loss=∑iN(ti∗−w^T∗ϕ5(Pi))2
+函数优化目标为：W∗=argminw∗∑iN(ti∗−w^T∗ϕ5(Pi))2+λ||w^∗||2
+利用梯度下降法或者最小二乘法就可以得到 w∗w∗。
