@@ -1,3 +1,7 @@
+"""
+深度学习模型预测代码
+"""
+
 import tensorflow as tf
 import utils
 import AlexNet
