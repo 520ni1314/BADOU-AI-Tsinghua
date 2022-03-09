@@ -1,0 +1,142 @@
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.nn import Conv2d, MaxPool2d, ReLU, BatchNorm2d, Linear, Dropout, Softmax
+import torch.optim as optim
+import torch.nn.functional as F
+import torchvision.transforms as transforms
+from torchvision.datasets import CIFAR10
+from torch.utils.data import DataLoader
+
+
+class Vgg16(nn.Module):
+    def __init__(self, num_class):
+        super(Vgg16, self).__init__()
+        self.num_class = num_class
+        net1 = self.make_features()
+        net2 = self.make_classifiers()
+        self.features = nn.Sequential(*net1)
+        self.classifiers = nn.Sequential(*net2)
+
+    def make_layer(self, in_channels, out_channels, kernel_size=(3, 3), padding=1):
+        net = []
+        net.append(Conv2d(in_channels, out_channels, kernel_size, padding=padding))
+        net.append(BatchNorm2d(out_channels))
+        net.append(ReLU(inplace=True))
+        return net
+
+    def make_features(self):
+        net = []
+        # block 1
+        net += self.make_layer(in_channels=3, out_channels=64, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=64, out_channels=64, kernel_size=(3, 3), padding=1)
+        net.append(MaxPool2d(kernel_size=(2, 2), stride=2))
+
+        # block 2
+        net += self.make_layer(in_channels=64, out_channels=128, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=128, out_channels=128, kernel_size=(3, 3), padding=1)
+        net.append(MaxPool2d(kernel_size=(2, 2), stride=2))
+
+        # block 3
+        net += self.make_layer(in_channels=128, out_channels=256, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=256, out_channels=256, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=256, out_channels=256, kernel_size=(3, 3), padding=1)
+        net.append(MaxPool2d(kernel_size=(2, 2), stride=2))
+
+        # block 4
+        net += self.make_layer(in_channels=256, out_channels=512, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=512, out_channels=512, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=512, out_channels=512, kernel_size=(3, 3), padding=1)
+        net.append(MaxPool2d(kernel_size=(2, 2), stride=2))
+
+        # block 5
+        net += self.make_layer(in_channels=512, out_channels=512, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=512, out_channels=512, kernel_size=(3, 3), padding=1)
+        net += self.make_layer(in_channels=512, out_channels=512, kernel_size=(3, 3), padding=1)
+        net.append(MaxPool2d(kernel_size=(2, 2), stride=2))
+
+        return net
+
+    def make_classifiers(self):
+        net = []
+		# in_features=C*H*W，此处因为cifar10图像大小为32*32，所以in_features=512*1*1
+		# 如果数据集是224*224，那此处应为512*7*7
+        net.append(Linear(in_features=512, out_features=4096))		
+        net.append(ReLU(inplace=True))
+        net.append(Dropout())
+        net.append(Linear(in_features=4096, out_features=4096))
+        net.append(ReLU(inplace=True))
+        net.append(Dropout())
+        net.append(Linear(in_features=4096, out_features=self.num_class))
+        net.append(Softmax())
+        return net
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifiers(x)
+        return x
+
+
+class Model:
+    def __init__(self, net):
+        self.net = net
+        self.criterion = nn.CrossEntropyLoss()
+        self.optimizer = optim.SGD(self.net.parameters(), lr=0.1, momentum=0.9)
+
+    def train(self, train_loader, epochs=3):
+        for epoch in range(epochs):
+            running_loss = 0.0
+            for i, data in enumerate(train_loader):
+                self.optimizer.zero_grad()
+                inputs, labels = data
+                inputs, labels = inputs.cuda(), labels.cuda()
+                outputs = self.net(inputs)
+                loss = self.criterion(outputs, labels)
+                loss.backward()
+                self.optimizer.step()
+                print(loss)
+                running_loss += loss.item()
+                if i % 10 == 0:
+                    print("[epoch %d, %.2f%%] loss: %.3f" % (epoch+1, (i+1)/len(train_loader), running_loss/100))
+                    running_loss = 0.0
+        print("Finished Training")
+
+    def evaluate(self, test_loader):
+        print("evaluating...")
+        total = 0
+        correct = 0
+        with torch.no_grad():
+            for i, data in enumerate(test_loader):
+                inputs, labels = data
+                inputs, labels = inputs.cuda(), labels.cuda()
+                outputs = self.net(inputs)
+                predcits = np.argmax(outputs, 1)
+                total += labels.size(0)
+                correct += (predcits == labels).sum().item()
+        print("accuracy is %.2f" % (correct*100.0/total))
+
+
+def loader():
+    # transform = transforms.Compose([transforms.ToTensor(),
+    #                                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+    #                                 transforms.Resize((224, 224))])
+    transform = transforms.Compose([transforms.ToTensor(),
+									transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+    train_set = CIFAR10("./cifar10", train=True, transform=transform, dwnload=False)
+    test_set = CIFAR10("./cifar10", train=False, transform=transform, download=False)
+    train_loader = DataLoader(train_set, batch_size=10, shuffle=True, num_workers=0)
+    test_loader = DataLoader(test_set, batch_size=10, shuffle=False, num_workers=0)
+    return train_loader, test_loader
+
+
+classes = ("plane", "car", "bird", "cat", "deer", "dog", "frog","horse", "ship", "truck")
+if __name__ =="__main__":
+    train_loader, test_loader = loader()
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # vgg = Vgg16(num_class=10).cuda()
+    vgg = Vgg16(num_class=10)
+    model = Model(vgg)
+    model.train(train_loader=train_loader, epochs=3)
+    model.evaluate(test_loader=test_loader)
+
