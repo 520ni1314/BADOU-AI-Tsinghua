@@ -1,6 +1,6 @@
 """
 功能：Inception-V3网络实现
-论文：Rethinking the Inception Architecture for Computer Vision](http://arxiv.org/abs/1512.00567
+论文：Rethinking the Inception Architecture for Computer Vision(http://arxiv.org/abs/1512.00567)
 框架：TensorFlow：2.3.0
 """
 from __future__ import print_function
